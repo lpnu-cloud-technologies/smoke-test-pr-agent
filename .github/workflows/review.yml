@@ -1,0 +1,27 @@
+name: PR Agent for NULP
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  pr_agent_job:
+    runs-on: ubuntu-latest
+    name: Run PR Agent on every pull request
+    steps:
+      - name: pr-agent-nulp
+        uses: shakhanton/Pr-Agent-NULP@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_REPOSITORY: ${{ github.repository }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GOOGLE_CREDENTIALS_CONTENT: ${{ secrets.GOOGLE_CREDENTIALS_CONTENT }}
+          GOOGLE_SPREADSHEET_URL: ${{ secrets.GOOGLE_SPREADSHEET_URL }}
+          LAB_PATH_RULES: >-
+            {
+              "lab-1": ["terraform/modules/dynamodb/", "terraform/main.tf", "terraform/context.tf"],
+              "lab-2": ["terraform/modules/lambda/", "terraform/api.tf", "terraform/apigw.tf"],
+              "lab-3": ["terraform/frontend.tf", "terraform/s3.tf", "terraform/cloudfront.tf", "react-app-frontend/"],
+              "lab-4": ["terraform/alarm.tf", "terraform/notify_slack.tf", "terraform/cloudwatch.tf"]
+            }
+          MAX_ATTEMPTS: "3"
