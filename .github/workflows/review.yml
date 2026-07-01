@@ -8,6 +8,9 @@ jobs:
   pr_agent_job:
     runs-on: ubuntu-latest
     name: Run PR Agent on every pull request
+    permissions:
+      pull-requests: write
+      issues: write
     steps:
       - name: pr-agent-nulp
         uses: shakhanton/Pr-Agent-NULP@main
